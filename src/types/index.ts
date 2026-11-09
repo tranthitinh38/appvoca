@@ -1,5 +1,18 @@
 import { VocabularyItem, UnitData, SpeakingChallenge } from '../data/unitsData';
 
+/**
+ * Thông tin người dùng hiện tại (học sinh hoặc giáo viên).
+ */
+export interface User {
+  /** Định danh duy nhất */
+  id: string;
+  /** Tên hiển thị */
+  name: string;
+  /** Vai trò của người dùng */
+  role: 'student' | 'teacher';
+}
+
+
 export interface UserProgress {
   level: number;
   levelTitle: string;
