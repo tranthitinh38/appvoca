@@ -1,0 +1,84 @@
+import { VocabularyItem, UnitData, SpeakingChallenge } from '../data/unitsData';
+
+export interface UserProgress {
+  level: number;
+  levelTitle: string;
+  xp: number;
+  xpToNextLevel: number;
+  streak: number;
+  lastActiveDate: string;
+  dailyGoalWords: number;
+  wordsReviewedToday: number;
+  completedSpeakingToday: number;
+  pvpWins: number;
+  pvpTotal: number;
+  badges: Badge[];
+  items: InventoryItem[];
+}
+
+export interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  unlockedAt?: string;
+}
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  count: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  xpAwarded?: number;
+}
+
+export interface SpeakingFeedback {
+  overallScore: number;
+  ipaScore: number;
+  stressScore: number;
+  intonationScore: number;
+  targetIpa: string;
+  phoneticBreakdown: {
+    word: string;
+    ipa: string;
+    status: 'perfect' | 'warning' | 'need_work';
+    tip: string;
+  }[];
+  feedbackIpa: string;
+  feedbackStress: string;
+  feedbackIntonation: string;
+  encouragement: string;
+  xpGained: number;
+}
+
+export interface ExtractedOcrResult {
+  detectedUnit: string;
+  summary: string;
+  extractedVocabulary: {
+    word: string;
+    partOfSpeech: string;
+    ipa: string;
+    meaningVi: string;
+    collocation: string;
+    wordFamily: string;
+    synonyms?: string;
+    antonyms?: string;
+    contextExample: string;
+    imagePrompt4k: string;
+    difficulty: string;
+  }[];
+  quickQuiz: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    explanation: string;
+  }[];
+}
