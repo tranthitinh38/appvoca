@@ -30,8 +30,8 @@ const defaultAuth: AuthContextProps = {
     badges: [],
     items: [],
   },
-  setUser: () => {},
-  setUserProgress: () => {},
+  setUser: (_: User) => {},
+  setUserProgress: (_: UserProgress) => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(defaultAuth);
