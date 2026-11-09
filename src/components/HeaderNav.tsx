@@ -1,13 +1,17 @@
 import React from 'react';
-import { Sparkles, Flame, Trophy, Volume2, BookOpen, Mic, Camera, Swords, BarChart3, MessageSquare } from 'lucide-react';
+import { Sparkles, Flame, Trophy, BookOpen, Mic, Camera, Swords, BarChart3, MessageSquare } from 'lucide-react';
 import { GLOBAL_SUCCESS_UNITS, UnitData } from '../data/unitsData';
-import { UserProgress } from '../types';
+import { User, UserProgress } from '../types';
 
+/** Header navigation bar with user info and tab switching */
 interface HeaderNavProps {
   currentUnit: UnitData;
   onSelectUnit: (unit: UnitData) => void;
-  activeTab: 'mentor' | 'speaking' | 'flashcards' | 'ocr' | 'pvp' | 'dashboard';
-  setActiveTab: (tab: 'mentor' | 'speaking' | 'flashcards' | 'ocr' | 'pvp' | 'dashboard') => void;
+  /** Tabs: mentor, speaking, flashcards, ocr, pvp, dashboard, optional manage for teachers */
+  activeTab: 'mentor' | 'speaking' | 'flashcards' | 'ocr' | 'pvp' | 'dashboard' | 'manage';
+  setActiveTab: (tab: HeaderNavProps['activeTab']) => void;
+  /** Logged‑in user */
+  user: User;
   userProgress: UserProgress;
 }
 
@@ -16,6 +20,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   onSelectUnit,
   activeTab,
   setActiveTab,
+  user,
   userProgress,
 }) => {
   const xpPercent = Math.min(100, Math.round((userProgress.xp / userProgress.xpToNextLevel) * 100));
@@ -30,9 +35,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 ring-2 ring-indigo-400/30">
               <Sparkles className="w-5 h-5 text-white animate-pulse" />
             </div>
-            <span className="absolute -bottom-1 -right-1 text-xs px-1.5 py-0.2 bg-emerald-500 text-slate-950 font-bold rounded-full border border-slate-900 text-[10px]">
-              8th
-            </span>
+            <span className="absolute -bottom-1 -right-1 text-xs px-1.5 py-0.2 bg-emerald-500 text-slate-950 font-bold rounded-full border border-slate-900 text-[10px]">8th</span>
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -46,6 +49,11 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <p className="text-xs text-slate-400 hidden sm:block">
               SGK Tiếng Anh 8 • NXB Giáo dục Việt Nam
             </p>
+          </div>
+          {/* User badge */}
+          <div className="flex items-center gap-2 text-sm text-slate-200">
+            <span className="font-medium">{user.role === 'teacher' ? 'Giáo viên' : 'Học sinh'}:</span>
+            <span className="font-semibold">{user.name || 'Chưa đăng nhập'}</span>
           </div>
         </div>
 
@@ -75,7 +83,6 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <Flame className="w-4 h-4 fill-amber-400 text-orange-500 animate-bounce" />
             <span>{userProgress.streak} ngày</span>
           </div>
-
           {/* Level & XP */}
           <div className="hidden xs:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700/80">
             <Trophy className="w-3.5 h-3.5 text-yellow-400" />
@@ -94,84 +101,97 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <span className="text-[11px] font-extrabold text-indigo-400 pl-1">{userProgress.xp} XP</span>
           </div>
         </div>
-      </div>
 
-      {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 border-t border-slate-800/80 flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1.5">
-        <button
-          onClick={() => setActiveTab('mentor')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
-            activeTab === 'mentor'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <MessageSquare className="w-4 h-4" />
-          <span>AI Mentor Chat</span>
-        </button>
+        {/* Navigation Tabs */}
+        <div className="max-w-7xl mx-auto px-4 border-t border-slate-800/80 flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1.5">
+          <button
+            onClick={() => setActiveTab('mentor')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'mentor'
+                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>AI Mentor Chat</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('speaking')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer relative ${
-            activeTab === 'speaking'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <Mic className="w-4 h-4 text-pink-300" />
-          <span>AI Speaking Buddy</span>
-          <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-pink-500 text-white">
-            IPA 3D
-          </span>
-        </button>
+          <button
+            onClick={() => setActiveTab('speaking')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'speaking'
+                ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <Mic className="w-4 h-4 text-pink-300" />
+            <span>AI Speaking Buddy</span>
+            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-pink-500 text-white">IPA 3D</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('flashcards')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
-            activeTab === 'flashcards'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <BookOpen className="w-4 h-4 text-emerald-300" />
-          <span>12 Units & SRS</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('flashcards')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'flashcards'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-emerald-300" />
+            <span>12 Units & SRS</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('ocr')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
-            activeTab === 'ocr'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <Camera className="w-4 h-4 text-cyan-300" />
-          <span>Quét SGK (OCR)</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('ocr')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'ocr'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <Camera className="w-4 h-4 text-cyan-300" />
+            <span>Quét SGK (OCR)</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('pvp')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
-            activeTab === 'pvp'
-              ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md shadow-rose-600/30 animate-pulse'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <Swords className="w-4 h-4 text-amber-300" />
-          <span>Đấu Trường PvP</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('pvp')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'pvp'
+                ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md shadow-rose-600/30 animate-pulse'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <Swords className="w-4 h-4 text-amber-300" />
+            <span>Đấu Trường PvP</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('dashboard')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
-            activeTab === 'dashboard'
-              ? 'bg-slate-700 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-          }`}
-        >
-          <BarChart3 className="w-4 h-4 text-indigo-300" />
-          <span>Dashboard</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+              activeTab === 'dashboard'
+                ? 'bg-slate-700 text-white shadow-md'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4 text-indigo-300" />
+            <span>Dashboard</span>
+          </button>
+
+          {/* Teacher‑only Manage tab */}
+          {user.role === 'teacher' && (
+            <button
+              onClick={() => setActiveTab('manage')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap cursor-pointer ${
+                activeTab === 'manage'
+                  ? 'bg-green-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <BarChart3 className="w-4 h-4 text-emerald-300" />
+              <span>Quản lý lớp</span>
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
