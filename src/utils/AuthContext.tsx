@@ -30,27 +30,8 @@ const defaultAuth: AuthContextProps = {
     badges: [],
     items: [],
   },
-  setUser: (_: User) => {},
-  setUserProgress: (_: UserProgress) => {},
-};
-  user: { id: '', name: '', role: 'student' },
-  userProgress: {
-    level: 0,
-    levelTitle: '',
-    xp: 0,
-    xpToNextLevel: 0,
-    streak: 0,
-    lastActiveDate: '',
-    dailyGoalWords: 0,
-    wordsReviewedToday: 0,
-    completedSpeakingToday: 0,
-    pvpWins: 0,
-    pvpTotal: 0,
-    badges: [],
-    items: [],
-  },
-  setUser: (_: User) => {},
-  setUserProgress: (_: UserProgress) => {},
+  setUser: () => {},
+  setUserProgress: () => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(defaultAuth);
