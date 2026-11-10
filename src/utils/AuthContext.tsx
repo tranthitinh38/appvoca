@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, UserProgress } from '../types';
 
 /**
- * Context for authentication/ user state.
+ * Context for authentication / user state.
  * Provides current user, progress and setters.
  */
 interface AuthContextProps {
@@ -14,6 +14,25 @@ interface AuthContextProps {
 
 // Default values when no user is logged in.
 const defaultAuth: AuthContextProps = {
+  user: { id: '', name: '', role: 'student' },
+  userProgress: {
+    level: 0,
+    levelTitle: '',
+    xp: 0,
+    xpToNextLevel: 0,
+    streak: 0,
+    lastActiveDate: '',
+    dailyGoalWords: 0,
+    wordsReviewedToday: 0,
+    completedSpeakingToday: 0,
+    pvpWins: 0,
+    pvpTotal: 0,
+    badges: [],
+    items: [],
+  },
+  setUser: (_: User) => {},
+  setUserProgress: (_: UserProgress) => {},
+};
   user: { id: '', name: '', role: 'student' },
   userProgress: {
     level: 0,
