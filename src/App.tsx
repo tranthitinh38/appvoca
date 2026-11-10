@@ -11,11 +11,15 @@ import { TeacherDashboard } from './components/TeacherDashboard';
 import { TeacherManagement } from './components/TeacherManagement';
 import { GLOBAL_SUCCESS_UNITS, UnitData, VocabularyItem } from './data/unitsData';
 import { useAuth } from './utils/AuthContext';
+import { StudentLogin } from './components/StudentLogin';
 import { sounds } from './utils/speechUtils';
 import confetti from 'canvas-confetti';
 
 export default function App() {
-  const { user, userProgress, setUserProgress } = useAuth();
+  const { user, userProgress, setUser, setUserProgress } = useAuth();
+  if (!user.name) {
+    return <StudentLogin />;
+  }
   const [currentUnit, setCurrentUnit] = useState<UnitData>(GLOBAL_SUCCESS_UNITS[0]);
   const [activeTab, setActiveTab] = useState<'mentor' | 'speaking' | 'flashcards' | 'ocr' | 'pvp' | 'dashboard' | 'manage'>('mentor');
 
