@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, UserProgress } from '../types';
 
 /**
- * Context for authentication / user state.
+ * Context for authentication/ user state.
  * Provides current user, progress and setters.
  */
 interface AuthContextProps {
